@@ -89,4 +89,28 @@ class TranslationController extends Controller
             'message' => 'Translation deleted successfully',
         ]);
     }
+
+    public function export()
+    {
+        $translations = Translation::with('language')->get()->groupBy('language.code');
+        $export = $translations->mapWithKeys(function ($group, $code) {
+            return [$code => $group->pluck('content', 'key')->toArray()];
+        });
+        return response()->json($export);
+    }
+
+    public function search(Request $request)
+    {
+        $query = Translation::query();
+        if ($request->has('key')) {
+            $query->where('key', 'like', '%'.$request->key.'%');
+        }
+        if ($request->has('content')) {
+            $query->where('content', 'like', '%'.$request->content.'%');
+        }
+        if ($request->has('tags')) {
+            $query->whereJsonContains('tags', $request->tags);
+        }
+        return $query->with('language')->get();
+    }
 }
