@@ -5,6 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Translation;
 use App\Services\BasicTranslationService;
+use OpenApi\Annotations as OA;
+
+/**
+ * @OA\Info(title="Translation API", version="1.0")
+ * @OA\Get(
+ *     path="/api/translations",
+ *     @OA\Response(response="200", description="List translations")
+ * )
+ * @OA\Post(
+ *     path="/api/translations",
+ *     @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/Translation")),
+ *     @OA\Response(response="201", description="Create translation")
+ * )
+ */
 
 class TranslationController extends Controller
 {
