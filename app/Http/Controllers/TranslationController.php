@@ -13,9 +13,15 @@ class TranslationController extends Controller
      */
     public function index()
     {
-        //
         $translations = Translation::with('language')->get();
-        return response()->json($translations);
+        $service = new BasicTranslationService();
+        $mappedTranslations = $translations->map(function ($translation) use ($service) {
+            if ($translation->original_content && $translation->from_locale && $translation->to_locale) {
+                $translation->content = $service->translate($translation->original_content, $translation->from_locale, $translation->to_locale);
+            }
+            return $translation;
+        });
+        return $mappedTranslations;
     }
 
     /**
@@ -41,13 +47,13 @@ class TranslationController extends Controller
         ]);
         if ($request->has('original_content') && $request->has('from_locale') && $request->has('to_locale')) {
             $service = new BasicTranslationService();
+            $translation->original_content = $request->original_content;
+            $translation->from_locale = $request->from_locale;
+            $translation->to_locale = $request->to_locale;
             $translation->content = $service->translate($request->original_content, $request->from_locale, $request->to_locale);
         }
-        $translation->save();    
-        return response()->json([
-            'message' => 'Translation created successfully',
-            'translation' => $translation,
-        ], 201);
+        $translation->save();
+        return $translation->load('language');
     }
 
     /**
