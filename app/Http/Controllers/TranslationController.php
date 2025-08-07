@@ -47,6 +47,11 @@ class TranslationController extends Controller
     public function show(string $id)
     {
         //
+        $translation = Translation::with('language')->findOrFail($id);
+        if (!$translation) {
+            return response()->json(['message' => 'Translation not found'], 404);
+        }
+        return response()->json($translation);
     }
 
     /**
@@ -55,6 +60,18 @@ class TranslationController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $translation = Translation::findOrFail($id);
+        $request->validate([
+            'key' => 'sometimes|required|string|max:255',
+            'content' => 'sometimes|required|string',
+            'language_id' => 'sometimes|required|exists:languages,id',
+            'tags' => 'nullable|array',
+        ]);
+        $translation->update($request->only(['key', 'content', 'language_id', 'tags']));
+        return response()->json([
+            'message' => 'Translation updated successfully',
+            'translation' => $translation,
+        ]);
     }
 
     /**
@@ -63,5 +80,13 @@ class TranslationController extends Controller
     public function destroy(string $id)
     {
         //
+        $translation = Translation::findOrFail($id);
+        if (!$translation) {
+            return response()->json(['message' => 'Translation not found'], 404);
+        }
+        $translation->delete();
+        return response()->json([
+            'message' => 'Translation deleted successfully',
+        ]);
     }
 }
