@@ -13,6 +13,7 @@ class LanguageController extends Controller
     public function index()
     {
         //
+        return Language::all();
     }
 
     /**
@@ -49,6 +50,7 @@ class LanguageController extends Controller
     public function show(string $id)
     {
         //
+        return Language::findOrFail($id);
     }
 
     /**
@@ -57,6 +59,22 @@ class LanguageController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        /*
+        return response()->json([
+            'message' => 'This is a test response from the LanguageController update method.',
+            'data' => $request->all(),
+        ]);
+        */
+        $language = Language::findOrFail($id);
+        $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'code' => 'sometimes|required|string|max:10|unique:languages,code,' . $id,
+        ]);
+        $language->update($request->only(['name', 'code']));
+        return response()->json([
+            'message' => 'Language updated successfully',
+            'language' => $language,
+        ]);
     }
 
     /**
@@ -65,5 +83,10 @@ class LanguageController extends Controller
     public function destroy(string $id)
     {
         //
+        $language = Language::findOrFail($id);
+        $language->delete();
+        return response()->json([
+            'message' => 'Language deleted successfully',
+        ]);
     }
 }
