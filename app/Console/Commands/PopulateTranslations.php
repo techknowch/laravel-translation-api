@@ -14,9 +14,13 @@ class PopulateTranslations extends Command
     {
         $count = $this->argument('count');
         $this->info("Populating translations table with {$count} records...");
-
-        Translation::factory()->count($count)->create();
-
+    
+        $batchSize = 1000;
+        for ($i = 0; $i < $count; $i += $batchSize) {
+            Translation::factory()->count(min($batchSize, $count - $i))->create();
+            $this->info("Created batch up to record " . ($i + $batchSize));
+        }
+    
         $this->info('Population complete!');
         return Command::SUCCESS;
     }

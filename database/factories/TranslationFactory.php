@@ -14,7 +14,7 @@ class TranslationFactory extends Factory
     {
         $languages = Language::pluck('id')->all();
         return [
-            'key' => $this->faker->unique()->word,
+            'key' => 'key_' . $this->faker->unique()->uuid,
             'content' => $this->faker->sentence,
             'original_content' => $this->faker->sentence,
             'from_locale' => 'en',
