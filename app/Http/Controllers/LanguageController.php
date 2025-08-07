@@ -21,18 +21,13 @@ class LanguageController extends Controller
      */
     public function store(Request $request)
     {
-        // Test response to ensure the controller is working
         /*
         return response()->json([
             'message' => 'This is a test response from the LanguageController store method.',
             'data' => $request->all(),
         ]);
         */
-        $code = $request->input('code');
-        $name = $request->input('name');
-        if(!$code || !$name) {
-            return response()->json(['error' => 'Code and name are required'], 400);
-        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:10|unique:languages,code',
@@ -50,7 +45,11 @@ class LanguageController extends Controller
     public function show(string $id)
     {
         //
-        return Language::findOrFail($id);
+        $language = Language::findOrFail($id);
+        if(!$language->exists) {
+            return response()->json(['message' => 'Language not found'], 404);
+        }
+        return response()->json($language);
     }
 
     /**
