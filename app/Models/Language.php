@@ -15,4 +15,9 @@ class Language extends Model
     ];
     public $timestamps = true;
     protected $primaryKey = 'id';
+
+    public function translations()
+    {
+        return $this->hasMany(Translation::class, 'language_id');
+    }
 }
