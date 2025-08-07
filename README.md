@@ -1,61 +1,279 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Translation API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A scalable API for managing translations across multiple languages, built with Laravel 12.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Laravel 12**: Modern framework with closure-based bootstrap
+- **Laravel Sanctum**: Token-based authentication
+- **Custom API Key Middleware**: Fast, dependency-free access control
+- **Multi-language Support**: Manage translations for multiple languages
+- **Search and Export**: Advanced search capabilities and export functionality
+- **Performance Optimized**: Database indexes and efficient queries
+- **OpenAPI/Swagger Documentation**: Auto-generated API documentation
+- **Comprehensive Testing**: Unit and feature tests with performance validation
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Technology Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 12, PHP 8.2+
+- **Database**: MySQL/SQLite with optimized indexes
+- **Authentication**: Laravel Sanctum + Custom API Key middleware
+- **Testing**: PHPUnit with performance testing
+- **Documentation**: Swagger/OpenAPI via zircote/swagger-php
 
-## Learning Laravel
+## 📦 Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Prerequisites
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP >= 8.2
+- Composer
+- MySQL or SQLite
+- Node.js and NPM (optional, for frontend)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Setup Instructions
 
-## Laravel Sponsors
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/techknowch/laravel-translation-api.git
+   cd laravel-translation-api
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Install dependencies**
+   ```bash
+   composer install
+   ```
 
-### Premium Partners
+3. **Configure environment**
+   ```bash
+   cp .env.example .env
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. **Update environment variables**
+   ```env
+   APP_URL=http://localhost
+   
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=laravel_translation
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   
+   API_KEY=your-secure-api-key-here
+   ```
 
-## Contributing
+5. **Generate application key**
+   ```bash
+   php artisan key:generate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Run migrations**
+   ```bash
+   php artisan migrate
+   ```
 
-## Code of Conduct
+7. **Seed initial languages**
+   ```bash
+   php artisan tinker
+   ```
+   Then run:
+   ```php
+   Language::create(['code' => 'en', 'name' => 'English']);
+   Language::create(['code' => 'ur', 'name' => 'Urdu']);
+   Language::create(['code' => 'fr', 'name' => 'French']);
+   Language::create(['code' => 'es', 'name' => 'Spanish']);
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+8. **Populate test data (optional)**
+   ```bash
+   php artisan db:populate-translations 100000
+   ```
 
-## Security Vulnerabilities
+9. **Start the application**
+   ```bash
+   php artisan serve
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📡 API Endpoints
 
-## License
+### Authentication
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The API supports two authentication methods:
+
+#### API Key Authentication
+Include the header:
+```
+X-API-KEY: your-secure-api-key-here
+```
+
+#### Bearer Token Authentication (Sanctum)
+Include the header:
+```
+Authorization: Bearer <token>
+```
+
+### Available Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/api/translations` | List all translations | ✅ |
+| `POST` | `/api/translations` | Create a new translation | ✅ |
+| `GET` | `/api/translations/{id}` | Get specific translation | ✅ |
+| `PUT` | `/api/translations/{id}` | Update translation | ✅ |
+| `DELETE` | `/api/translations/{id}` | Delete translation | ✅ |
+| `GET` | `/api/translations/search` | Search translations | ✅ |
+| `GET` | `/api/translations/export` | Export translations | ✅ |
+| `GET` | `/api/translations/translate` | Translate text | ✅ |
+| `GET` | `/api/languages` | List all languages | ✅ |
+| `POST` | `/api/languages` | Create a new language | ✅ |
+| `GET` | `/api/languages/{id}` | Get specific language | ✅ |
+| `PUT` | `/api/languages/{id}` | Update language | ✅ |
+| `DELETE` | `/api/languages/{id}` | Delete language | ✅ |
+
+### Example API Usage
+
+#### Create a Translation
+```bash
+curl -X POST http://localhost:8000/api/translations \
+  -H "X-API-KEY: your-secure-api-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "key": "welcome_message",
+    "content": "Welcome to our application",
+    "language_id": 1,
+    "tags": ["web", "mobile"]
+  }'
+```
+
+#### Search Translations
+```bash
+curl -X GET "http://localhost:8000/api/translations/search?key=welcome&tags=web" \
+  -H "X-API-KEY: your-secure-api-key-here"
+```
+
+#### Translate Text
+```bash
+curl -X GET "http://localhost:8000/api/translations/translate?content=Hello&from=en&to=fr" \
+  -H "X-API-KEY: your-secure-api-key-here"
+```
+
+## 🗄️ Database Schema
+
+### Languages Table
+- `id` (Primary Key)
+- `name` (Unique)
+- `code` (Unique)
+- `created_at`, `updated_at`
+
+### Translations Table
+- `id` (Primary Key)
+- `key` (Indexed)
+- `content` (Text)
+- `language_id` (Foreign Key)
+- `tags` (JSON, nullable)
+- `original_content` (Text, nullable)
+- `from_locale` (String, nullable)
+- `to_locale` (String, nullable)
+- `created_at`, `updated_at`
+
+**Indexes:**
+- `key` index for fast lookups
+- `language_id, key` composite index
+- `language_id, tag_value` composite index
+
+## 🧪 Testing
+
+### Run Tests
+```bash
+# Run all tests
+php artisan test
+
+# Run with coverage (requires Xdebug or PCOV)
+php artisan test --coverage
+
+# Run performance tests
+php artisan test --filter=testPerformanceIndex
+```
+
+### Test Coverage
+The application includes comprehensive tests:
+- **Unit Tests**: Controller and service layer testing
+- **Feature Tests**: API endpoint testing
+- **Performance Tests**: Validates response times under load
+
+## 🏗️ Architecture
+
+### Models
+- **Translation**: Manages translation content with relationships to languages
+- **Language**: Manages supported languages
+- **User**: Laravel's default user model for Sanctum authentication
+
+### Controllers
+- **TranslationController**: Handles CRUD operations for translations
+- **LanguageController**: Manages language operations
+
+### Services
+- **BasicTranslationService**: Provides translation functionality with fallback mappings
+
+### Middleware
+- **CheckApiKey**: Custom middleware for API key validation
+
+### Console Commands
+- **PopulateTranslations**: Populates the database with test data
+
+## 🔧 Configuration
+
+### API Key Setup
+The API key middleware is configured in `bootstrap/app.php`:
+```php
+$middleware->alias([
+    'api.key' => CheckApiKey::class,
+]);
+```
+
+### Database Optimization
+The application includes optimized database indexes for:
+- Fast translation lookups by key
+- Efficient language-based queries
+- Tag-based filtering
+
+## 🚀 Performance Features
+
+- **Database Indexing**: Optimized indexes for common query patterns
+- **Batch Processing**: Efficient handling of large datasets
+- **Memory Management**: Chunked processing for large operations
+- **Response Time Validation**: Tests ensure sub-200ms response times
+
+## 📚 Documentation
+
+### OpenAPI/Swagger
+The API includes auto-generated OpenAPI documentation via swagger-php annotations.
+
+### Code Documentation
+All controllers and services include comprehensive PHPDoc comments.
+
+## 🔮 Future Enhancements
+
+- **Caching Layer**: Redis integration for frequently accessed translations
+- **Real-time Translation APIs**: Integration with Google Translate, DeepL, etc.
+- **Advanced Search**: Full-text search capabilities
+- **Translation Memory**: Learning from previous translations
+- **Bulk Operations**: Batch import/export functionality
+- **Version Control**: Translation versioning and rollback capabilities
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🆘 Support
+
+For support and questions, please open an issue on GitHub or contact the development team.
