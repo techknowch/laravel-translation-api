@@ -8,7 +8,7 @@ class Translation extends Model
 {
     //
     protected $table = 'translations';
-    protected $fillable = ['key', 'content', 'language_id', 'tags'];
+    protected $fillable = ['key', 'content', 'original_content', 'from_locale', 'to_locale', 'language_id', 'tags'];
     protected $casts = [
         'key' => 'string',
         'content' => 'string',
