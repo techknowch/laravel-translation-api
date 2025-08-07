@@ -11,28 +11,18 @@ class BasicTranslationService
         'en' => [
             'Hello' => 'ہیلو', // Urdu
             'Goodbye' => 'خدا حافظ', // Urdu
-            'Hello' => 'Hola', // Spanish (example)
-            'Goodbye' => 'Adiós', // Spanish (example)
-            'Hello' => 'Bonjour', // French (example)
-            'Goodbye' => 'Au revoir', // French (example)
         ],
         'fr' => [
             'Hello' => 'Bonjour',
             'Goodbye' => 'Au revoir',
-            'Hello' => 'ہیلو', // Urdu
-            'Goodbye' => 'الوداع', // Urdu
-            'Hello' => 'Hola', // Spanish (example)
-            'Goodbye' => 'Adiós', // Spanish (example)
-            'Hello' => 'Bonjour', // French
-            'Goodbye' => 'Au revoir', // French
         ],
         'es' => [
             'Hello' => 'Hola',
             'Goodbye' => 'Adiós',
-            'Hello' => 'ہیلو', // Urdu
-            'Goodbye' => 'الوداع', // Urdu
-            'Hello' => 'Bonjour', // French (example)
-            'Goodbye' => 'Au revoir', // French (example)
+        ],
+        'ur' => [
+            'Hello' => 'ہیلو',
+            'Goodbye' => 'خدا حافظ',
         ],
     ];
 
@@ -43,7 +33,7 @@ class BasicTranslationService
         }
 
         // Check database for existing translation
-        $toLanguageId = Language::where('code', $toLocale)->first()->id ?? null;
+        $toLanguageId = Language::where('code', $toLocale)->first()?->id;
         if ($toLanguageId) {
             $translation = Translation::where('original_content', $text)
                 ->where('language_id', $toLanguageId)
@@ -55,7 +45,12 @@ class BasicTranslationService
         }
 
         // Fall back to default mappings
-        $fromMappings = $this->defaultMappings[$fromLocale] ?? [];
-        return $fromMappings[$text] ?? $text; // Return default or original if no match
+        $fromMappings = $this->defaultMappings[$toLocale] ?? [];
+        return $this->translateFromMappings($text, $fromMappings);
+    }
+
+    private function translateFromMappings(string $text, array $mappings): string
+    {
+        return $mappings[$text] ?? $text; // Return default or original if no match
     }
 }
