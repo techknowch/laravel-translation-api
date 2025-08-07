@@ -108,6 +108,32 @@ class TranslationController extends Controller
         ]);
     }
 
+    public function translate(Request $request)
+    {
+        /*
+        return response()->json([
+            'message' => 'This is a test response from the TranslationController translate method.',
+            'data' => $request->all(),
+        ]);
+        */
+
+        $request->validate([
+            'content' => 'required|string',
+            'from' => 'required|exists:languages,code',
+            'to' => 'required|exists:languages,code'
+        ]);
+
+        $service = new BasicTranslationService();
+        $translatedContent = $service->translate($request->content, $request->from, $request->to);
+
+        return response()->json([
+            'original_content' => $request->content,
+            'from' => $request->from,
+            'to' => $request->to,
+            'translated_content' => $translatedContent
+        ]);
+    }
+
     public function export()
     {
         $translations = Translation::with('language')->get()->groupBy('language.code');
