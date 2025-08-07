@@ -18,9 +18,10 @@ return new class extends Migration
             $table->text('content');
             $table->unsignedBigInteger('language_id');
             $table->json('tags')->nullable();
+            $table->string('tag_value')->nullable()->storedAs('JSON_UNQUOTE(JSON_EXTRACT(tags, "$[0]"))');
             $table->foreign('language_id')->references('id')->on('languages')->onDelete('cascade');
             $table->index(['language_id', 'key'], 'translations_language_key_index');
-            $table->index(['language_id', 'tags'], 'translations_language_tags_index');
+            $table->index(['language_id', 'tag_value'], 'translations_language_tags_index');
         });
     }
 
