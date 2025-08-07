@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Translation;
 
 class TranslationController extends Controller
 {
@@ -12,6 +13,8 @@ class TranslationController extends Controller
     public function index()
     {
         //
+        $translations = Translation::with('language')->get();
+        return response()->json($translations);
     }
 
     /**
@@ -20,6 +23,22 @@ class TranslationController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'key' => 'required|string|max:255',
+            'content' => 'required|string',
+            'language_id' => 'required|exists:languages,id',
+            'tags' => 'nullable|array',
+        ]);
+        $translation = Translation::create([
+            'key' => $request->key,
+            'content' => $request->content,
+            'language_id' => $request->language_id,
+            'tags' => $request->tags ?? [],
+        ]);
+        return response()->json([
+            'message' => 'Translation created successfully',
+            'translation' => $translation,
+        ], 201);
     }
 
     /**
