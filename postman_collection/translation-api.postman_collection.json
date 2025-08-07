@@ -1,0 +1,355 @@
+{
+	"info": {
+		"_postman_id": "c3e22962-641e-423c-8134-13d9ab4e0a0c",
+		"name": "translation-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41731385"
+	},
+	"item": [
+		{
+			"name": "Languages",
+			"item": [
+				{
+					"name": "create_language",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Spanish\",\n  \"code\": \"es\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/languages",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"languages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_languages",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Ali Naqvi\",\n  \"email\": \"dev.alinaqvi@gmail.com\",\n  \"password\": \"password123\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/languages",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"languages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_language_id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/languages/{{language_id}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"languages",
+								"{{language_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_language",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Sample\",\n  \"code\": \"sm\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/languages/{{language_id}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"languages",
+								"{{language_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_language",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/languages/{{language_id}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"languages",
+								"{{language_id}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Translations",
+			"item": [
+				{
+					"name": "translations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/translations/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								""
+							],
+							"query": [
+								{
+									"key": "x-api-key",
+									"value": "{{api_key}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "translate",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/translations/translate?content=Hello&from=en&to=ur",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								"translate"
+							],
+							"query": [
+								{
+									"key": "content",
+									"value": "Hello"
+								},
+								{
+									"key": "from",
+									"value": "en"
+								},
+								{
+									"key": "to",
+									"value": "ur"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "translations",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"key\": \"greeting\",\n  \"content\": \"Hello\",\n  \"language_id\": 1,\n  \"tags\": [\"mobile\", \"web\"],\n  \"original_content\": \"Hello\",\n  \"from_locale\": \"en\",\n  \"to_locale\": \"fr\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/translations/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/translations/search?key=greeting&content=Bonjour&tags=web",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								"search"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "greeting"
+								},
+								{
+									"key": "content",
+									"value": "Bonjour"
+								},
+								{
+									"key": "tags",
+									"value": "web"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "export",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/translations/export",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								"export"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://127.0.0.1:8000",
+			"type": "default"
+		},
+		{
+			"key": "language_id",
+			"value": "1",
+			"type": "default"
+		},
+		{
+			"key": "api_key",
+			"value": "your_api_key_here",
+			"type": "default"
+		}
+	]
+}
