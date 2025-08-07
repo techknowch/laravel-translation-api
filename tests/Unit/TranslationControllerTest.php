@@ -25,4 +25,14 @@ class TranslationControllerTest extends TestCase
         $response = $this->postJson('/api/translations', $data);
         $response->assertStatus(201)->assertJson($data);
     }
+
+    public function testPerformanceIndex()
+    {
+        Translation::factory()->count(1000)->create();
+        $start = microtime(true);
+        $response = $this->getJson('/api/translations');
+        $end = microtime(true);
+        $this->assertLessThan(0.2, $end - $start); // < 200ms
+        $response->assertStatus(200);
+    }
 }
