@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Language;
 
 class LanguageController extends Controller
 {
@@ -19,7 +20,27 @@ class LanguageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Test response to ensure the controller is working
+        /*
+        return response()->json([
+            'message' => 'This is a test response from the LanguageController store method.',
+            'data' => $request->all(),
+        ]);
+        */
+        $code = $request->input('code');
+        $name = $request->input('name');
+        if(!$code || !$name) {
+            return response()->json(['error' => 'Code and name are required'], 400);
+        }
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:10|unique:languages,code',
+        ]);
+        //if the validation fails, it will automatically return a 422 response with the validation errors
+        return Language::create([
+            'name' => $request->name,
+            'code' => $request->code,
+        ]);
     }
 
     /**
