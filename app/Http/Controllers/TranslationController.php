@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Translation;
+use App\Services\BasicTranslationService;
 
 class TranslationController extends Controller
 {
@@ -33,8 +34,16 @@ class TranslationController extends Controller
             'key' => $request->key,
             'content' => $request->content,
             'language_id' => $request->language_id,
+            'original_content' => $request->original_content ?? null,
+            'from_locale' => $request->from_locale ?? null,
+            'to_locale' => $request->to_locale ?? null,
             'tags' => $request->tags ?? [],
         ]);
+        if ($request->has('original_content') && $request->has('from_locale') && $request->has('to_locale')) {
+            $service = new BasicTranslationService();
+            $translation->content = $service->translate($request->original_content, $request->from_locale, $request->to_locale);
+        }
+        $translation->save();    
         return response()->json([
             'message' => 'Translation created successfully',
             'translation' => $translation,
@@ -65,6 +74,9 @@ class TranslationController extends Controller
             'key' => 'sometimes|required|string|max:255',
             'content' => 'sometimes|required|string',
             'language_id' => 'sometimes|required|exists:languages,id',
+            'original_content' => 'nullable|string',
+            'from_locale' => 'nullable|string|max:10',
+            'to_locale' => 'nullable|string|max:10',
             'tags' => 'nullable|array',
         ]);
         $translation->update($request->only(['key', 'content', 'language_id', 'tags']));
